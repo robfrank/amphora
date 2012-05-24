@@ -12,6 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -20,6 +21,13 @@ import static it.jugtorino.chalk.Joiners.onSpaceJoiner;
 import static com.google.common.base.Joiner.on;
 
 public class AmphoraTest {
+
+	@Test
+	public void shoudBeAnErrorAmphora() {
+		assertTrue(Amphora.ERROR.isError());
+		assertFalse(Amphora.ERROR.isNotError());
+
+	}
 
 	@Test
 	public void shouldRenameMultiValuesFields() throws Exception {
@@ -242,14 +250,10 @@ public class AmphoraTest {
 				.add("splitMe", "one two three four")
 				.add("renameME", new Amphora().add("name", "inner"));
 
-		System.out.println(amphora);
-
 		amphora.modify("incrementMe", incrementer)
 				.mergeValuesOf("joinMe", Joiners.onSpaceJoiner)
 				.split("splitMe")
 				.rename("renameME", "renamed");
-
-		System.out.println(amphora);
 
 		Amphora littleAmphora = amphora.rawValueOf("renamed");
 		Integer incremented = amphora.rawValueOf("incrementMe");

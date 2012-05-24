@@ -14,12 +14,13 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static it.jugtorino.chalk.Joiners.onSpaceJoiner;
+import static it.jugtorino.chalk.Matchers.checkThat;
 import static it.jugtorino.chalk.Objects.isNotNull;
-import static it.jugtorino.chalk.Objects.isNotSameObject;
 import static it.jugtorino.chalk.Objects.isNull;
-import static it.jugtorino.chalk.Objects.isSameObject;
 import static it.jugtorino.chalk.Objects.not;
 import static com.google.common.base.Functions.toStringFunction;
 import static com.google.common.base.Predicates.contains;
@@ -114,11 +115,11 @@ public class Amphora {
 	}
 
 	public boolean isError() {
-		return isSameObject(this, ERROR);
+		return checkThat(this, sameInstance(ERROR));
 	}
 
 	public boolean isNotError() {
-		return isNotSameObject(this, ERROR);
+		return checkThat(this, not(sameInstance(ERROR)));
 	}
 
 	public boolean hasField(String fieldName) {
@@ -210,13 +211,13 @@ public class Amphora {
 		return this;
 	}
 
-	public Amphora modify(String fieldName, Function fieldModifier) {
-		replace(fieldName, fieldModifier.apply(rawValueOf(fieldName)));
+	public <F, T> Amphora modify(String fieldName, Function<F, T> fieldModifier) {
+		replace(fieldName, fieldModifier.apply((F) rawValueOf(fieldName)));
 		return this;
 	}
 
-	public Amphora apply(String from, Function transformer, String to) {
-		add(to, transformer.apply(rawValueOf(from)));
+	public <F, T> Amphora apply(String from, Function<F, T> transformer, String to) {
+		add(to, transformer.apply((F) rawValueOf(from)));
 		return this;
 	}
 
