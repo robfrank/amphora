@@ -1,0 +1,54 @@
+*Amphora*
+
+Amphora is single, simple, multi value, untyped data container
+
+*Why Amphora?*
+
+A presentation of "Amphora":http://presentz.org/jugtorino/201205_01_killbean_2 (in italian)
+We need to do some simple ETL during ingestion of data.
+
+*Example*
+
+This simple example shows how to use an Amphora object to do a simple ETL. 
+
+First: create an Amphora with mixed content in a fluet way
+<pre>
+
+		Amphora amphora = new Amphora()
+				.add("incrementMe", Integer.valueOf(1))
+				.add("txt", "a very long text")
+				.add("joinMe", "multi1")
+				.add("joinMe", "multi2")
+				.add("joinMe", "multi3")
+				.add("joinMe", "multi4")
+				.add("joinMe", "multi5")
+				.add("splitMe", "one two three four")
+				.add("renameME", new Amphora().add("name", "inner"));
+
+</pre>
+
+Now do some simple ETL:
+
+<pre>
+
+	amphora.mergeValuesOf("joinMe", Joiners.onSpaceJoiner)
+				.split("splitMe")
+				.rename("renameME", "renamed");
+
+</pre>
+
+And now pass a Function that Amphora uses to modify field's values:
+
+<pre>
+		Function<Integer, Integer> incrementer = new Function<Integer, Integer>() {
+
+			@Override
+			public Integer apply(Integer input) {
+				return ++input;
+			}
+		};
+
+		amphora.modify("incrementMe", incrementer);
+
+</pre>
+	
