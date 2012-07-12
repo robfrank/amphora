@@ -66,7 +66,7 @@ public class AmphoraTest {
 
 	}
 
-	@Test
+	@Tes
 	public void shouldMergeMultiValuesFields() throws Exception {
 		Amphora amphora = new Amphora()
 				.add("name", "first")

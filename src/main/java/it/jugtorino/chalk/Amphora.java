@@ -14,7 +14,9 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static it.jugtorino.chalk.Joiners.onSpaceJoiner;
@@ -22,6 +24,7 @@ import static it.jugtorino.chalk.Matchers.checkThat;
 import static it.jugtorino.chalk.Objects.isNotNull;
 import static it.jugtorino.chalk.Objects.isNull;
 import static it.jugtorino.chalk.Objects.not;
+import static it.jugtorino.chalk.Splitters.onSpaceSplitter;
 import static com.google.common.base.Functions.toStringFunction;
 import static com.google.common.base.Predicates.contains;
 
@@ -50,7 +53,7 @@ public class Amphora {
 	public String valueOf(String fieldName) {
 		Object rawValue = rawValueOf(fieldName);
 
-		if (Objects.isNull(rawValue)) return EMPTY;
+		if (checkThat(rawValue, is(nullValue()))) return EMPTY;
 		return rawValue.toString();
 	}
 
@@ -183,8 +186,7 @@ public class Amphora {
 	}
 
 	public Amphora split(String fieldName) {
-		split(fieldName, Splitter.on(' '));
-
+		split(fieldName, onSpaceSplitter);
 		return this;
 
 	}
