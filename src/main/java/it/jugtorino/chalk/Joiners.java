@@ -25,7 +25,6 @@ public class Joiners {
 			.put(" ", onSpaceJoiner)
 			.put("_", onUnderscoreJoiner)
 			.put("&", onAmpJoiner)
-			.put("_", onUnderscoreJoiner)
 			.put("/", onSlashJoiner)
 			.put(" - ", onMinusAndSpacesJoiner)
 			.build();

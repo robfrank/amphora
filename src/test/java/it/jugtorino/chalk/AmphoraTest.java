@@ -66,7 +66,7 @@ public class AmphoraTest {
 
 	}
 
-	@Tes
+	@Test
 	public void shouldMergeMultiValuesFields() throws Exception {
 		Amphora amphora = new Amphora()
 				.add("name", "first")
@@ -256,7 +256,9 @@ public class AmphoraTest {
 				.rename("renameME", "renamed");
 
 		Amphora littleAmphora = amphora.rawValueOf("renamed");
-		Integer incremented = amphora.rawValueOf("incrementMe");
+		assertThat(littleAmphora.valueOf("name"), equalTo("inner"));
 
+		Integer incremented = amphora.rawValueOf("incrementMe");
+		assertThat(incremented, equalTo(2));
 	}
 }
