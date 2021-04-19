@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class Objects {
 
+	private Objects(){
+		// Private constructor for utility class    
+	}
+    
 	public static boolean isNull(Object o) {
 		return o == null;
 	}

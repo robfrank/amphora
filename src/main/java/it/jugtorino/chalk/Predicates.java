@@ -6,6 +6,10 @@ import com.google.common.base.Predicate;
 
 public class Predicates {
 
+	private Predicates(){
+		// Private constructor for utility class    
+	}
+    
 	public static <T> boolean checkThat(T actual, Predicate<? super T> predicate) {
 		return predicate.apply(actual);
 	}

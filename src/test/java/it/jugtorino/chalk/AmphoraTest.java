@@ -225,7 +225,7 @@ public class AmphoraTest {
 		assertThat(amphora.valueOf("name"), equalTo("2"));
 		assertThat((Integer) amphora.rawValueOf("name"), equalTo(2));
 		assertEquals("2", amphora.valueOf("name"));
-		assertEquals(2, amphora.rawValueOf("name"));
+		assertEquals(2, (int)amphora.rawValueOf("name"));
 
 	}
 

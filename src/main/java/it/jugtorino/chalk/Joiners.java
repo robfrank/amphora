@@ -7,6 +7,10 @@ import com.google.common.collect.ImmutableMap;
 
 public class Joiners {
 
+	private Joiners(){
+		// Private constructor for utility class    
+	}
+        
 	public static final Joiner onSpaceJoiner = Joiner.on(' ').skipNulls();
 
 	public static final Joiner onUnderscoreJoiner = Joiner.on('_').skipNulls();
@@ -21,7 +25,7 @@ public class Joiners {
 
 	public static final Joiner onMinusAndSpacesJoiner = Joiner.on(" - ").skipNulls();
 
-	private static final Map<String, Joiner> joiners = ImmutableMap.<String, Joiner> builder()
+	private static final Map<String, Joiner> separatorJoiners = ImmutableMap.<String, Joiner> builder()
 			.put(" ", onSpaceJoiner)
 			.put("_", onUnderscoreJoiner)
 			.put("&", onAmpJoiner)
@@ -30,7 +34,7 @@ public class Joiners {
 			.build();
 
 	public static Joiner onSeparatorJoiner(String separator) {
-		if (joiners.containsKey(separator)) return joiners.get(separator);
+		if (separatorJoiners.containsKey(separator)) return separatorJoiners.get(separator);
 		return Joiner.on(separator).skipNulls();
 	}
 
