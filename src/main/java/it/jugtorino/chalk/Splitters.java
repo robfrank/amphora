@@ -7,6 +7,10 @@ import com.google.common.collect.ImmutableMap;
 
 public class Splitters {
 
+	private Splitters(){
+		// Private constructor for utility class    
+	}
+    
 	public static final Splitter onSpaceSplitter = Splitter.on(' ').omitEmptyStrings().trimResults();
 
 	public static final Splitter onCommaSplitter = Splitter.on(',').omitEmptyStrings().trimResults();
@@ -23,7 +27,7 @@ public class Splitters {
 
 	public static final Splitter onMinusAndSpacesSplitter = Splitter.on(" - ").omitEmptyStrings().trimResults();
 
-	private static final Map<String, Splitter> splitters = ImmutableMap.<String, Splitter> builder()
+	private static final Map<String, Splitter> separatorSplitters = ImmutableMap.<String, Splitter> builder()
 			.put(" ", onSpaceSplitter)
 			.put(",", onCommaSplitter)
 			.put(";", onSemicolonSplitter)
@@ -32,7 +36,7 @@ public class Splitters {
 			.put(" - ", onMinusAndSpacesSplitter).build();
 
 	public static Splitter onSeparatorSplitter(String separator) {
-		if (splitters.containsKey(separator)) return splitters.get(separator);
+		if (separatorSplitters.containsKey(separator)) return separatorSplitters.get(separator);
 		return Splitter.on(separator).omitEmptyStrings().trimResults();
 	}
 
