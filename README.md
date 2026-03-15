@@ -2,19 +2,41 @@
 
 [![Java CI](https://github.com/it-jugtorino/amphora/actions/workflows/ci.yml/badge.svg)](https://github.com/it-jugtorino/amphora/actions/workflows/ci.yml)
 [![Java Version](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/technologies/javase/25-relnote-issues.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Amphora is a single, simple, multi-value, untyped data container.
+Amphora is a simple, multi-value, shapable data container for Java. It allows you to build complex data structures fluently and perform simple ETL (Extract, Transform, Load) operations like joining, splitting, renaming, and modifying fields.
 
 ## Why Amphora?
 
-A presentation of [Amphora](http://presentz.org/jugtorino/201205_01_killbean_2) (in Italian).
-We need to do some simple ETL during ingestion of data.
+Amphora was designed to simplify data ingestion and transformation tasks. It's particularly useful for:
+- Quick ETL operations during data ingestion.
+- Building flexible data models that need to be "reshaped" frequently.
+- Handling semi-structured data where fields might have multiple values.
 
-## Example
+For more background, see this [presentation of Amphora](http://presentz.org/jugtorino/201205_01_killbean_2) (in Italian).
 
-This simple example shows how to use an Amphora object to do a simple ETL.
+## Features
 
-First: create an Amphora with mixed content in a fluent way:
+- **Fluent API:** Build data containers with ease.
+- **Multi-value Support:** Fields can store multiple values.
+- **ETL Operations:** Built-in support for `merge`, `split`, `rename`, and `modify`.
+- **Immutability:** Take immutable snapshots of your data at any time.
+
+## Installation
+
+To use Amphora in your Maven project, add the following dependency to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>it.jugtorino</groupId>
+    <artifactId>amphora</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
+## Example Usage
+
+### 1. Create an Amphora
 
 ```java
 var amphora = new Amphora()
@@ -29,7 +51,7 @@ var amphora = new Amphora()
                 .add("renameME", new Amphora().add("name", "inner"));
 ```
 
-Now do some simple ETL:
+### 2. Transform Data
 
 ```java
 amphora.mergeValuesOf("joinMe", Joiners.onSpaceJoiner)
@@ -37,17 +59,24 @@ amphora.mergeValuesOf("joinMe", Joiners.onSpaceJoiner)
        .rename("renameME", "renamed");
 ```
 
-And now pass a `Function` that Amphora uses to modify field's values:
+### 3. Modify Values
 
 ```java
 Function<Integer, Integer> incrementer = input -> ++input;
-
 amphora.modify("incrementMe", incrementer);
 ```
 
-You can also take an immutable snapshot of the data:
+### 4. Take a Snapshot
 
 ```java
 var snapshot = amphora.snapshot();
 System.out.println(snapshot.data());
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
