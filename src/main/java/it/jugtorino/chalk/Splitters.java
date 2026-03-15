@@ -1,7 +1,5 @@
 package it.jugtorino.chalk;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 
 public class Splitters {
@@ -10,38 +8,32 @@ public class Splitters {
     // Private constructor for utility class
   }
 
-  public static final Splitter onSpaceSplitter = Splitter.on(' ').omitEmptyStrings().trimResults();
+  public static final String onSpaceSplitter = " ";
 
-  public static final Splitter onCommaSplitter = Splitter.on(',').omitEmptyStrings().trimResults();
+  public static final String onCommaSplitter = ",";
 
-  public static final Splitter onSemicolonSplitter =
-      Splitter.on(';').omitEmptyStrings().trimResults();
+  public static final String onSemicolonSplitter = ";";
 
-  public static final Splitter onUnderscoreSplitter =
-      Splitter.on('_').omitEmptyStrings().trimResults();
+  public static final String onUnderscoreSplitter = "_";
 
-  public static final Splitter onAmpSplitter = Splitter.on('&').omitEmptyStrings().trimResults();
+  public static final String onAmpSplitter = "&";
 
-  public static final Splitter onQuestionMarkSplitter =
-      Splitter.on('?').omitEmptyStrings().trimResults();
+  public static final String onQuestionMarkSplitter = "\\?";
 
-  public static final Splitter onSlashSplitter = Splitter.on('/').omitEmptyStrings().trimResults();
+  public static final String onSlashSplitter = "/";
 
-  public static final Splitter onMinusAndSpacesSplitter =
-      Splitter.on(" - ").omitEmptyStrings().trimResults();
+  public static final String onMinusAndSpacesSplitter = " - ";
 
-  private static final Map<String, Splitter> separatorSplitters =
-      ImmutableMap.<String, Splitter>builder()
-          .put(" ", onSpaceSplitter)
-          .put(",", onCommaSplitter)
-          .put(";", onSemicolonSplitter)
-          .put("_", onUnderscoreSplitter)
-          .put("/", onSlashSplitter)
-          .put(" - ", onMinusAndSpacesSplitter)
-          .build();
+  private static final Map<String, String> separatorSplitters =
+      Map.of(
+          " ", onSpaceSplitter,
+          ",", onCommaSplitter,
+          ";", onSemicolonSplitter,
+          "_", onUnderscoreSplitter,
+          "/", onSlashSplitter,
+          " - ", onMinusAndSpacesSplitter);
 
-  public static Splitter onSeparatorSplitter(String separator) {
-    if (separatorSplitters.containsKey(separator)) return separatorSplitters.get(separator);
-    return Splitter.on(separator).omitEmptyStrings().trimResults();
+  public static String onSeparatorSplitter(String separator) {
+    return separatorSplitters.getOrDefault(separator, separator);
   }
 }

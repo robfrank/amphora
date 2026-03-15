@@ -4,8 +4,9 @@ import static it.jugtorino.chalk.Joiners.onMinusAndSpacesJoiner;
 import static it.jugtorino.chalk.Joiners.onSpaceJoiner;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.common.base.Function;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class AmphoraTest {
     assertThat(amphora.hasField("newName")).isTrue();
     assertThat(amphora.hasNotField("name")).isTrue();
 
-    assertThat(onSpaceJoiner.join(amphora.valuesOf("newName"))).isEqualTo("first second third");
+    assertThat(String.join(onSpaceJoiner, amphora.valuesOf("newName"))).isEqualTo("first second third");
   }
 
   @Test
@@ -196,5 +197,18 @@ class AmphoraTest {
 
     Integer incremented = amphora.rawValueOf("incrementMe");
     assertThat(incremented).isEqualTo(2);
+  }
+
+  @Test
+  void shouldReturnSnapshot() {
+    var amphora = new Amphora().add("key1", "val1").add("key1", "val2").add("key2", "val3");
+    var snapshot = amphora.snapshot();
+
+    assertThat(snapshot.data()).isEqualTo(amphora.asRawMap());
+    assertThat(snapshot.data()).containsEntry("key1", List.of("val1", "val2"));
+
+    // Snapshot should be immutable view or copy
+    amphora.add("key3", "val4");
+    assertThat(snapshot.data()).doesNotContainKey("key3");
   }
 }

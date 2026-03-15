@@ -1,7 +1,5 @@
 package it.jugtorino.chalk;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 
 public class Joiners {
@@ -10,31 +8,29 @@ public class Joiners {
     // Private constructor for utility class
   }
 
-  public static final Joiner onSpaceJoiner = Joiner.on(' ').skipNulls();
+  public static final String onSpaceJoiner = " ";
 
-  public static final Joiner onUnderscoreJoiner = Joiner.on('_').skipNulls();
+  public static final String onUnderscoreJoiner = "_";
 
-  public static final Joiner onAmpJoiner = Joiner.on('&').skipNulls();
+  public static final String onAmpJoiner = "&";
 
-  public static final Joiner onQuestionMarkJoiner = Joiner.on('?').skipNulls();
+  public static final String onQuestionMarkJoiner = "?";
 
-  public static final Joiner onSlashJoiner = Joiner.on('/').skipNulls();
+  public static final String onSlashJoiner = "/";
 
-  public static final Joiner onEmptyJoiner = Joiner.on("").skipNulls();
+  public static final String onEmptyJoiner = "";
 
-  public static final Joiner onMinusAndSpacesJoiner = Joiner.on(" - ").skipNulls();
+  public static final String onMinusAndSpacesJoiner = " - ";
 
-  private static final Map<String, Joiner> separatorJoiners =
-      ImmutableMap.<String, Joiner>builder()
-          .put(" ", onSpaceJoiner)
-          .put("_", onUnderscoreJoiner)
-          .put("&", onAmpJoiner)
-          .put("/", onSlashJoiner)
-          .put(" - ", onMinusAndSpacesJoiner)
-          .build();
+  private static final Map<String, String> separatorJoiners =
+      Map.of(
+          " ", onSpaceJoiner,
+          "_", onUnderscoreJoiner,
+          "&", onAmpJoiner,
+          "/", onSlashJoiner,
+          " - ", onMinusAndSpacesJoiner);
 
-  public static Joiner onSeparatorJoiner(String separator) {
-    if (separatorJoiners.containsKey(separator)) return separatorJoiners.get(separator);
-    return Joiner.on(separator).skipNulls();
+  public static String onSeparatorJoiner(String separator) {
+    return separatorJoiners.getOrDefault(separator, separator);
   }
 }
