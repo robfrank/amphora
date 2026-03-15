@@ -12,9 +12,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import lombok.ToString;
-
-@ToString
 public class Amphora {
 
   public static final Amphora ERROR = new Amphora();
@@ -225,6 +222,11 @@ public class Amphora {
   }
 
   public record AmphoraSnapshot(Map<String, List<Object>> data) {}
+
+  @Override
+  public String toString() {
+    return "Amphora(data=" + data + ")";
+  }
 
   @Override
   public int hashCode() {
