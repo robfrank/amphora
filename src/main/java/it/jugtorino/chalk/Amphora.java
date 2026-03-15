@@ -12,10 +12,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 public class Amphora {
 
-  public static final Amphora ERROR = new Amphora();
-  private static final String EMPTY = "";
+  public static final  Amphora ERROR = new Amphora();
+  private static final String  EMPTY = "";
 
   private final Map<String, List<Object>> data;
 
@@ -38,13 +39,15 @@ public class Amphora {
   @SuppressWarnings("unchecked")
   public <T> T rawValueOf(String fieldName) {
     List<Object> values = data.get(fieldName);
-    if (values == null || values.isEmpty()) return null;
+    if (values == null || values.isEmpty())
+      return null;
     return (T) values.get(0);
   }
 
   public Collection<String> valuesOf(String fieldName) {
     List<Object> values = data.get(fieldName);
-    if (values == null) return List.of();
+    if (values == null)
+      return List.of();
     return values.stream().map(Objects::toString).collect(Collectors.toList());
   }
 
@@ -150,7 +153,8 @@ public class Amphora {
   }
 
   public Amphora rename(String oldFieldName, String newFieldName) {
-    if (oldFieldName.equals(newFieldName)) return this;
+    if (oldFieldName.equals(newFieldName))
+      return this;
     copy(oldFieldName, newFieldName);
     remove(oldFieldName);
     return this;
@@ -221,7 +225,8 @@ public class Amphora {
     return new AmphoraSnapshot(Map.copyOf(snapshotData));
   }
 
-  public record AmphoraSnapshot(Map<String, List<Object>> data) {}
+  public record AmphoraSnapshot(Map<String, List<Object>> data) {
+  }
 
   @Override
   public String toString() {
@@ -235,8 +240,10 @@ public class Amphora {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
     Amphora other = (Amphora) obj;
     return Objects.equals(data, other.data);
   }
