@@ -1,6 +1,6 @@
 # Amphora Project Modernization (Java 25) Implementation Plan
 
-> **For agentic workers:** REQUIRED: Use superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED: Use superpowers:executing-plans to implement this plan. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Modernize the Amphora library to Java 25, remove legacy dependencies (Guava, Commons-Lang), and migrate to JUnit 5/AssertJ.
 
@@ -32,63 +32,93 @@
 
 ---
 
-## Chunk 1: Build System & Infrastructure
+## Chunk 1: Build System & Infrastructure (Approved)
 
 ### Task 1: Update Maven Configuration for Java 25
-- [ ] **Step 1: Modify `pom.xml` to target Java 25 and update plugins**
-- [ ] **Step 2: Run `mvn clean compile` to verify build setup**
-- [ ] **Step 3: Commit `pom.xml`**
+- [x] **Step 1: Modify `pom.xml` to target Java 25 and update plugins**
+    - Update `<maven.compiler.release>` to `25`.
+    - Update `maven-compiler-plugin` to `3.13.0+`.
+    - Update `maven-surefire-plugin` to `3.2.0+` (required for JUnit 5).
+    - Remove the obsolete `maven-eclipse-plugin`.
+    - Update `org.projectlombok:lombok` to `1.18.36+`.
+- [x] **Step 2: Run `mvn clean compile` to verify build setup**
+    - Run: `mvn clean compile`
+    - Expected: BUILD SUCCESS
+- [x] **Step 3: Commit `pom.xml`**
 
 ### Task 2: Configure CI/CD and Dependency Management
-- [ ] **Step 1: Create `.github/workflows/ci.yml`**
-- [ ] **Step 2: Create `.github/dependabot.yml`**
-- [ ] **Step 3: Commit GitHub configurations**
+- [x] **Step 1: Create `.github/workflows/ci.yml`**
+    - Set up JDK 25 (Temurin), run `mvn verify`. Use `actions/cache` for Maven.
+- [x] **Step 2: Create `.github/dependabot.yml`**
+    - Configure for Maven and GitHub Actions updates.
+- [x] **Step 3: Verify GitHub configurations**
+    - Run: `action-lint .github/workflows/ci.yml` (if available) or check YAML syntax manually.
+- [x] **Step 4: Commit GitHub configurations**
 
 ### Task 3: Setup pre-commit and Spotless
-- [ ] **Step 1: Add Spotless plugin to `pom.xml`**
-- [ ] **Step 2: Create `.pre-commit-config.yaml`**
-- [ ] **Step 3: Run `pre-commit install` and `mvn spotless:apply`**
-- [ ] **Step 4: Commit formatting and hook configs**
+- [x] **Step 1: Add Spotless plugin to `pom.xml`**
+    - Configure `google-java-format` (version `1.22.0+`).
+- [x] **Step 2: Create `.pre-commit-config.yaml`**
+    - Add hooks: `trailing-whitespace`, `end-of-file-fixer`, `check-yaml`.
+    - Add a `local` hook to run `mvn spotless:check`.
+- [x] **Step 3: Run hooks and Spotless**
+    - Run: `pre-commit install && pre-commit run --all-files`
+    - Run: `mvn spotless:apply`
+- [x] **Step 4: Commit formatting and hook configs**
 
 ---
 
 ## Chunk 2: Test Migration (JUnit 5 & AssertJ)
 
 ### Task 4: Migrate `AmphoraTest.java` to JUnit 5
-- [ ] **Step 1: Update imports from JUnit 4 (`org.junit.*`) to JUnit 5 (`org.junit.jupiter.api.*`)**
-- [ ] **Step 2: Replace `@Before` with `@BeforeEach`, `@Test` with JUnit 5's `@Test`**
-- [ ] **Step 3: Replace Hamcrest assertions with AssertJ (`assertThat(...)`)**
-- [ ] **Step 4: Run tests and ensure they fail/pass as expected**
-- [ ] **Step 5: Commit test migration**
+- [x] **Step 1: Add JUnit 5 (Jupiter) and AssertJ to `pom.xml`**
+- [x] **Step 2: Update imports from JUnit 4 (`org.junit.*`) to JUnit 5 (`org.junit.jupiter.api.*`)**
+- [x] **Step 3: Replace `@Before` with `@BeforeEach`, `@Test` with JUnit 5's `@Test`**
+- [x] **Step 4: Replace Hamcrest assertions with AssertJ (`assertThat(...)`)**
+- [x] **Step 5: Modernize test syntax using `var` and `List.of`**
+- [x] **Step 6: Run tests and ensure they pass**
+    - Run: \`mvn test\`
+    - Expected: All tests pass.
+- [x] **Step 7: Commit test migration**
 
 ---
 
 ## Chunk 3: Core Refactoring & Dependency Removal
 
 ### Task 5: Refactor `Amphora.java` (Part 1: Data Storage)
-- [ ] **Step 1: Replace `ListMultimap` with `Map<String, List<Object>>`**
-- [ ] **Step 2: Fix compilation errors in `add`, `get`, and other methods**
-- [ ] **Step 3: Verify with existing tests**
-- [ ] **Step 4: Commit storage refactor**
+- [x] **Step 1: Replace `ListMultimap` with `Map<String, List<Object>>` using `HashMap`**
+- [x] **Step 2: Fix compilation errors using Pattern Matching for `instanceof` and Switch Expressions for value processing**
+- [x] **Step 3: Verify with existing tests**
+- [x] **Step 4: Commit storage refactor**
 
-### Task 6: Refactor Utilities (`Joiners`, `Splitters`, etc.)
-- [ ] **Step 1: Refactor `Joiners.java` to use JDK `Collectors.joining()`**
-- [ ] **Step 2: Refactor `Splitters.java` to use `String.split()`**
-- [ ] **Step 3: Migrate `Predicates.java` and `Matchers.java` to JDK functional interfaces**
-- [ ] **Step 4: Commit utility modernization**
+### Task 5.1: Refactor `Amphora.java` (Part 2: API Modernization)
+- [x] **Step 1: Write a failing test for the new `snapshot()` method**
+- [x] **Step 2: Run test to verify it fails**
+- [x] **Step 3: Implement `snapshot()` as a Record-based immutable view**
+- [x] **Step 4: Run test to verify it passes**
+- [x] **Step 5: Commit API refactor**
+
+### Task 6: Refactor/Remove Utilities (`Joiners`, `Splitters`, etc.)
+- [x] **Step 1: Refactor `Joiners.java` to use JDK `Collectors.joining()` or replace with lambdas**
+- [x] **Step 2: Refactor `Splitters.java` to use `String.split()` or replace with lambdas**
+- [x] **Step 3: Migrate `Predicates.java` and `Matchers.java` to JDK functional interfaces (`java.util.function.Predicate`)**
+- [x] **Step 4: Remove `Objects.java` and replace with JDK `java.util.Objects`**
+- [x] **Step 5: Remove redundant utility classes where possible in favor of JDK static methods**
+- [x] **Step 6: Commit utility modernization/removal**
 
 ### Task 7: Final Dependency Removal
-- [ ] **Step 1: Remove Guava and Commons-Lang from `pom.xml`**
-- [ ] **Step 2: Remove any remaining imports in Java files**
-- [ ] **Step 3: Run full `mvn verify`**
-- [ ] **Step 4: Commit dependency pruning**
+- [x] **Step 1: Remove Guava and Commons-Lang from `pom.xml`**
+- [x] **Step 2: Remove any remaining imports in Java files (use \`grep\` to verify)**
+- [x] **Step 3: Run full `mvn verify`**
+- [x] **Step 4: Commit dependency pruning**
 
 ---
 
 ## Chunk 4: Documentation
 
 ### Task 8: Migrate README to Markdown
-- [ ] **Step 1: Create `README.md` from `README.textile` content**
-- [ ] **Step 2: Update code examples to modern Java 25 syntax**
-- [ ] **Step 3: Remove `README.textile`**
-- [ ] **Step 4: Commit documentation changes**
+- [x] **Step 1: Create `README.md` from `README.textile` content**
+- [x] **Step 2: Add status badges (CI status, Java version) to the new \`README.md\`**
+- [x] **Step 3: Update code examples to modern Java 25 syntax (`var`, `List.of`)**
+- [x] **Step 4: Remove `README.textile`**
+- [x] **Step 5: Commit documentation changes**
