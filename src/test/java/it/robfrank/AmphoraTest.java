@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package it.jugtorino.chalk;
+package it.robfrank;
 
-import static it.jugtorino.chalk.Joiners.onMinusAndSpacesJoiner;
-import static it.jugtorino.chalk.Joiners.onSpaceJoiner;
+import static it.robfrank.Joiners.onMinusAndSpacesJoiner;
+import static it.robfrank.Joiners.onSpaceJoiner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;

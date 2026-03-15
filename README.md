@@ -13,8 +13,6 @@ Amphora was designed to simplify data ingestion and transformation tasks. It's p
 - Building flexible data models that need to be "reshaped" frequently.
 - Handling semi-structured data where fields might have multiple values.
 
-For more background, see this [presentation of Amphora](http://presentz.org/jugtorino/201205_01_killbean_2) (in Italian).
-
 ## Features
 
 - **Fluent API:** Build data containers with ease.
@@ -28,7 +26,7 @@ To use Amphora in your Maven project, add the following dependency to your `pom.
 
 ```xml
 <dependency>
-    <groupId>it.jugtorino</groupId>
+    <groupId>it.robfrank</groupId>
     <artifactId>amphora</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
