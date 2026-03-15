@@ -26,7 +26,8 @@ class AmphoraTest {
     assertThat(amphora.hasField("newName")).isTrue();
     assertThat(amphora.hasNotField("name")).isTrue();
 
-    assertThat(String.join(onSpaceJoiner, amphora.valuesOf("newName"))).isEqualTo("first second third");
+    assertThat(String.join(onSpaceJoiner, amphora.valuesOf("newName")))
+        .isEqualTo("first second third");
   }
 
   @Test
@@ -85,7 +86,8 @@ class AmphoraTest {
   @Test
   void amphoraWithRawValues() {
     var amphora2 = new Amphora();
-    var amphora = new Amphora().add("stringVal", "this is a string").add("anotheramphora", amphora2);
+    var amphora =
+        new Amphora().add("stringVal", "this is a string").add("anotheramphora", amphora2);
 
     assertThat(amphora.valueOf("stringVal")).isEqualTo("this is a string");
 
