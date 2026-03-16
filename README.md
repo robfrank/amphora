@@ -75,6 +75,35 @@ System.out.println(snapshot.data());
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Releasing
+
+To release a new version of Amphora:
+
+1. Go to the **Actions** tab in GitHub.
+2. Select the **Release** workflow.
+3. Click **Run workflow**.
+4. Enter the new version (e.g., `1.0.0`) and choose whether to do a dry run.
+5. Click **Run workflow**.
+
+The workflow will:
+- Update the version in `pom.xml`.
+- Generate `CHANGELOG.md` based on Conventional Commits.
+- Create a Git tag and GitHub Release.
+- Sign and publish artifacts to Maven Central.
+
+### Prerequisites
+
+The following GitHub Secrets must be configured for the release workflow:
+
+- `GPG_PRIVATE_KEY`: Your ASCII-armored GPG private key.
+- `GPG_PASSPHRASE`: The passphrase for your GPG key.
+- `MAVEN_CENTRAL_USERNAME`: Your Central Portal username/token ID.
+- `MAVEN_CENTRAL_PASSWORD`: Your Central Portal password/token secret.
+
+### Conventional Commits
+
+Amphora uses [Conventional Commits](https://www.conventionalcommits.org/) for automated changelog generation. Ensure your commit messages follow the format (e.g., `feat: ...`, `fix: ...`).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
