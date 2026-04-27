@@ -236,4 +236,115 @@ class AmphoraTest {
     amphora.add("key3", "val4");
     assertThat(snapshot.data()).doesNotContainKey("key3");
   }
+
+  @Test
+  void shouldReturnEntries() {
+    var amphora = new Amphora().add("k1", "v1").add("k1", "v2").add("k2", "v3");
+    var entries = amphora.entries();
+
+    assertThat(entries)
+        .hasSize(3)
+        .contains(Map.entry("k1", "v1"), Map.entry("k1", "v2"), Map.entry("k2", "v3"));
+  }
+
+  @Test
+  void shouldHandleNullValuesAndMissingFields() {
+    var amphora = new Amphora();
+    amphora.add("nullKey", null);
+    assertThat(amphora.hasField("nullKey")).isFalse();
+    assertThat(amphora.valueOf("missing")).isEmpty();
+    Object missingRawValue = amphora.rawValueOf("missing");
+    assertThat(missingRawValue).isNull();
+    assertThat(amphora.valuesOf("missing")).isEmpty();
+    assertThat(amphora.rawValuesOf("missing")).isEmpty();
+  }
+
+  @Test
+  void shouldLoadDataFromMap() {
+    var data = Map.of("key1", "val1", "key2", 2);
+    var amphora = new Amphora().load(data);
+    assertThat(amphora.fields()).containsExactlyInAnyOrder("key1", "key2");
+    assertThat(amphora.valueOf("key2")).isEqualTo("2");
+  }
+
+  @Test
+  void shouldAddAllValues() {
+    var amphora = new Amphora().addAll("key", List.of("v1", "v2", "v3"));
+    assertThat(amphora.valuesOf("key")).hasSize(3).containsExactly("v1", "v2", "v3");
+  }
+
+  @Test
+  void shouldRemoveSpecificValue() {
+    var amphora = new Amphora().add("key", "v1").add("key", "v2");
+    amphora.remove("key", "v1");
+    assertThat(amphora.valuesOf("key")).containsExactly("v2");
+
+    amphora.remove("key", "v2");
+    assertThat(amphora.hasField("key")).isFalse();
+  }
+
+  @Test
+  void shouldRemoveEntireField() {
+    var amphora = new Amphora().add("key", "v1").add("key", "v2");
+    amphora.remove("key");
+    assertThat(amphora.hasField("key")).isFalse();
+  }
+
+  @Test
+  void shouldCheckFieldExistence() {
+    var amphora = new Amphora().add("key", "val");
+    assertThat(amphora.hasField("key")).isTrue();
+    assertThat(amphora.hasNotField("key")).isFalse();
+    assertThat(amphora.hasNotField("missing")).isTrue();
+  }
+
+  @Test
+  void shouldCheckValueExistence() {
+    var amphora = new Amphora().add("k1", "v1").add("k2", "v2");
+
+    assertThat(amphora.hasValue("v1")).isTrue();
+    assertThat(amphora.hasValue("k1", "v1")).isTrue();
+    assertThat(amphora.hasValue("k1", "v2")).isFalse();
+
+    assertThat(amphora.hasNotValue("missing")).isTrue();
+    assertThat(amphora.hasNotValue("k1", "v2")).isTrue();
+  }
+
+  @Test
+  void shouldCopyFields() {
+    var amphora = new Amphora().add("k1", "v1").add("k1", "v2");
+    amphora.copy("k1", "k2");
+
+    assertThat(amphora.valuesOf("k1")).containsExactly("v1", "v2");
+    assertThat(amphora.valuesOf("k2")).containsExactly("v1", "v2");
+  }
+
+  @Test
+  void shouldHandleSelfRename() {
+    var amphora = new Amphora().add("key", "val");
+    amphora.rename("key", "key");
+    assertThat(amphora.valuesOf("key")).containsExactly("val");
+  }
+
+  @Test
+  void shouldClearAllData() {
+    var amphora = new Amphora().add("k1", "v1").add("k2", "v2");
+    amphora.clear();
+    assertThat(amphora.fields()).isEmpty();
+  }
+
+  @Test
+  void shouldApplyTransformationToNewField() {
+    var amphora = new Amphora().add("age", 25);
+    amphora.apply("age", (Integer val) -> val + 1, "nextAge");
+    Integer nextAge = amphora.rawValueOf("nextAge");
+    assertThat(nextAge).isEqualTo(26);
+  }
+
+  @Test
+  void shouldVerifyObjectMethods() {
+    var amphora = new Amphora().add("key", "val");
+    assertThat(amphora.toString()).contains("key=[val]");
+    assertThat(amphora.hashCode()).isNotZero();
+  }
 }
